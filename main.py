@@ -314,7 +314,7 @@ def gender_distribution_bar_plot():
 
 
 """
-It is the entry point in python script.
+__main__: It is the entry point in python script.
 """
 if __name__ == "__main__":
     # call the function show_avg_temperature_with_line_plot(), it will show average temperature for USA states
