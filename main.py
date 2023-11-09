@@ -299,12 +299,12 @@ def gender_distribution_bar_plot():
         usa_cities_demographics_df.drop_duplicates(subset=['City', 'State'])
 
     # convert male population to millions
-    usa_cities_demographics_df['Male Population'] = round(
-        usa_cities_demographics_df['Male Population'] / 1000000)
+    usa_cities_demographics_df['Male Population'] = \
+        round(usa_cities_demographics_df['Male Population'] / 1000000, 2)
 
     # convert female population to millions
-    usa_cities_demographics_df['Female Population'] = round(
-        usa_cities_demographics_df['Female Population'] / 1000000)
+    usa_cities_demographics_df['Female Population'] = \
+        round(usa_cities_demographics_df['Female Population'] / 1000000, 2)
 
     # sort dataframe records based on total population
     sorted_population_df = usa_cities_demographics_df.sort_values(
@@ -328,12 +328,12 @@ def gender_distribution_bar_plot():
     # draw the bar plot and show male population and set color, width and
     # alpha attribute values
     plt.bar(top_cities_names, top_cities_male_pop,
-            color='blue', width=0.5, alpha=0.75)
+            color='blue', width=0.5, alpha=0.7)
 
     # draw the bar plot to show female population and set color, width
     # and alpha attribute values
     plt.bar(top_cities_names, top_cities_female_pop,
-            color='green', width=0.5, alpha=0.4)
+            color='green', width=0.5, alpha=0.5)
 
     # define tile for plot
     title = "Gender Distribution Analysis For Top 20 Most Populated Cities"
