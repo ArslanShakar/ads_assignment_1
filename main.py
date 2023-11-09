@@ -155,7 +155,7 @@ def show_avg_temperature_line_plot():
     plt.xlabel('Date (yyyy-mm)')
 
     # set ylabel value for x-axis
-    plt.ylabel(f'Average Temperature (°C)')
+    plt.ylabel('Average Temperature (°C)')
 
     # plot legend and set its location to Upper Right Corner
     plt.legend(loc='upper right')
