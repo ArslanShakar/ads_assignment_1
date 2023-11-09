@@ -1,4 +1,4 @@
-# Applied Data Science Assignment 1: Data Visualization 
+# Applied Data Science Assignment 1: Data Visualisation 
 
 ````
 Name: Arslan Shakar
