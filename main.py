@@ -25,7 +25,7 @@ def get_csv_dataframe(filepath, delimiter):
     This function will check if the target file does not exist, then it will
     raise `FileNotFoundError`. If file exists, it will read the CSV file and 
     return dataframe for target csv file.
-    :param delimiter: it is used as separator for while text based data from 
+    :param delimiter: it is used as separator for while text based data from
         a file like csv/text.
     :param filepath: file path where it is located in memory.
     :return: return the dataframe object for target csv file.
