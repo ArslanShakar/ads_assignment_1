@@ -7,12 +7,18 @@ Name: Arslan Shakar
 Student ID: 22086750
 ````
 
-## Installation
+## Requirements Installation
+### Please install the latest version of pip.
 
+```commandline
+pip install -r requirements.txt
+```
+or
 ```commandline
 python3 -m pip install -r requirements
 ```
 
+## Run Script Command
 ```commandline
 python main.py
 ```
