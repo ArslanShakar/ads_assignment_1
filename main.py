@@ -5,8 +5,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # define and initialize dataset files path
-dataset_usa_cities_demographics_filepath = 'datasets/usa_cities_demographics.csv'
-dataset_global_land_temperature_filepath = 'datasets/global_land_temperatures_city.csv'
+usa_cities_demographics_filepath = 'datasets/usa_cities_demographics.csv'
+global_land_temperature_filepath = 'datasets/global_land_temperatures_city.csv'
 
 # store the generated figures in below mention directory
 figures_dir = 'figures'
@@ -16,37 +16,52 @@ if not os.path.exists(figures_dir):
     os.mkdir(figures_dir)
 
 
-# This function read the csv file using pandas and return the dataframe object if file exists, otherwise
-# it will raise `FileNotFoundError` error
+# =============================================================================
+# This function read the csv file using pandas and return the dataframe object
+# if file exists, otherwise it will raise `FileNotFoundError` error
+# =============================================================================
 def get_csv_dataframe(filepath, delimiter):
     """
-    This function will check if the target file does not exist, then it will raise `FileNotFoundError`.
-    If file exists, it will read the CSV file and return dataframe for target csv file.
-    :param delimiter: it is used as separator for while text based data from a file like csv/text.
+    This function will check if the target file does not exist, then it will
+    raise `FileNotFoundError`. If file exists, it will read the CSV file and 
+    return dataframe for target csv file.
+    :param delimiter: it is used as separator for while text based data from 
+        a file like csv/text.
     :param filepath: file path where it is located in memory.
     :return: return the dataframe object for target csv file.
     """
-    # Make sure if the file path does not exist, then it will throw error `FileNotFoundError`
+    # Make sure if the file path does not exist, then it will
+    # throw error `FileNotFoundError`
     if not os.path.exists(filepath):
         raise FileNotFoundError
 
     # read csv file using pandas and return the pandas dataframe object
     return pd.read_csv(filepath, delimiter=delimiter, encoding='utf8')
 
+# =============================================================================
+# Visualisation 1: By using Line Plot Show the Average Temperature
+# =============================================================================
+
 
 def show_avg_temperature_line_plot():
     """
-    This function reads the data from dataset "global_land_temperatures_city.csv", extract the temperature
-    data for the United States of America and filtered records for specific U.S. cities (New York, Los Angeles,
-    San Francisco, Miami, Chicago, Las Vegas) and filtered dataset for year 2012. This function clean the
-    dataset by removing the records with missing values. Then sort the dataframe by `Date` column.  After data
-    extraction, transformation and cleaning this function show the Average Temperature comparison between the
-    specific U.S. cities (listed below) for year 2012 using the Line Plot. This function will also store the
-    plot figure/image in the specified directory `figures`.
+    This function reads the data from dataset 
+    "global_land_temperatures_city.csv", extract the temperature data for the
+    United States of America and filtered records for specific U.S. cities 
+    (New York, Los Angeles, San Francisco, Miami, Chicago, Las Vegas) and 
+    filtered dataset for year 2012. This function clean the dataset by 
+    removing the records with missing values. Then sort the dataframe by 
+    `Date` column.  After data extraction, transformation and cleaning this
+    function show the Average Temperature comparison between the specific 
+    U.S. cities (listed below) for year 2012 using the Line Plot. This 
+    function will also store the plot figure/image in the specified directory
+    `figures`.
     :return: None
     """
+
     # call function get_csv_dataframe()
-    df_temp = get_csv_dataframe(dataset_global_land_temperature_filepath, delimiter=',')
+    df_temp = get_csv_dataframe(
+        global_land_temperature_filepath, delimiter=',')
 
     cities = [
         "New York",
@@ -79,7 +94,7 @@ def show_avg_temperature_line_plot():
     # Sort dataframe records by date
     df_usa_temp = df_usa_temp.sort_values(by='Date')
 
-    # create new figure with and set size width is 10 inches, height is 7 inches.
+    # create new figure with and set size width is 10, height is 7 inches.
     # The `dpi` parameter shows dots per inch or resolution for the figure
     plt.figure(figsize=(10, 7), dpi=144)
 
@@ -152,32 +167,43 @@ def show_avg_temperature_line_plot():
     plt.show()
 
 
+# =============================================================================
+# Visualisation 2: By using Histogram Plot Show Population Percentage
+# =============================================================================
+
 def show_population_histogram_plot():
     """
-    This function draw histogram plot and in which show the population percentage (%)
-     of top 7 USA States with highest population. Firstly, extract the data from dataset
-     "usa_cities_demographics.csv". Clean the dataset and remove the rows having missing values.
-     Then remove the duplicate records based on columns `City` and `State`. Calculate the sum of
-     total population by apply `groupby` function on column `State`. Then Calculate percentage for
-     each state population over total population. After reading, cleaning and transform the data, then
-     this function draw the histogram plot and show top 7 USA states population with percentage in histogram
-     plot and we can analyze the different state population conveniently.
+    This function draw histogram plot and in which show the population
+    percentage (%) of top 7 USA States with highest population. Firstly, 
+    extract the data from dataset "usa_cities_demographics.csv". Clean the 
+    dataset and remove the rows having missing values. Then remove the 
+    duplicate records based on columns `City` and `State`. Calculate the sum
+    of total population by apply `groupby` function on column `State`. Then 
+    Calculate percentage for each state population over total population. 
+    After reading, cleaning and transform the data, then this function draw 
+    the histogram plot and show top 7 USA states population with percentage 
+    in histogram plot and we can analyze the different state population 
+    conveniently.
     :return: None
     """
-    # get dataframe object by calling the function get_csv_dataframe(filepath, delimiter).
-    usa_cities_demographics_df = get_csv_dataframe(dataset_usa_cities_demographics_filepath, delimiter=";")
+    # get dataframe object by calling the function get_csv_dataframe
+    usa_cities_demographics_df = get_csv_dataframe(
+        usa_cities_demographics_filepath, delimiter=";")
 
     # Clean dataset for removing the records with missing values
     usa_cities_demographics_df = usa_cities_demographics_df.dropna()
 
     # Drop duplicates based on columns `city` and `state` combinations
-    usa_cities_demographics_df = usa_cities_demographics_df.drop_duplicates(subset=['City', 'State'])
+    usa_cities_demographics_df = \
+        usa_cities_demographics_df.drop_duplicates(subset=['City', 'State'])
 
     # calculate the total population for each USA state.
-    usa_states_population_df = usa_cities_demographics_df.groupby('State')['Total Population'].sum()
+    usa_states_population_df = usa_cities_demographics_df.groupby('State')[
+        'Total Population'].sum()
 
     # sort the states based on total population
-    sorted_population_df = usa_states_population_df.sort_values(ascending=False)
+    sorted_population_df = usa_states_population_df.sort_values(
+        ascending=False)
 
     # extract the first/top 7 state names from `sorted_population_df`
     selected_state_names = list(sorted_population_df.keys())[:7]
@@ -188,10 +214,11 @@ def show_population_histogram_plot():
     # calculate the sum population of all of USA states
     total_pop = usa_cities_demographics_df['Total Population'].sum()
 
-    # Calculate each state population percentage and store in list `state_pop_percentages`
-    state_pop_percentages = [round((state_pop / total_pop) * 100, 2) for state_pop in selected_states_population]
+    # Calculate each state population percentage and store in list
+    state_pop_percentages = [round((state_pop / total_pop) * 100, 2)
+                             for state_pop in selected_states_population]
 
-    # create new figure with and set size width is 10 inches, height is 7 inches.
+    # create new figure with and set size width is 10, height is 7 inches.
     # The `dpi` parameter shows dots per inch or resolution for the figure
     plt.figure(figsize=(8, 6), dpi=144)
 
@@ -220,7 +247,11 @@ def show_population_histogram_plot():
         height = patches[i].get_height()
 
         # set the total percentage value of a state to its corresponding bin
-        plt.annotate("{}%".format(state_pop_percentages[i]), (width, height), ha='center', va='bottom')
+        plt.annotate("{}%".format(
+            state_pop_percentages[i]),
+            (width, height),
+            ha='center',
+            va='bottom')
 
     # define the title of plot
     title = "USA Top 7 States with Highest Population"
@@ -244,49 +275,65 @@ def show_population_histogram_plot():
     plt.show()
 
 
+# =============================================================================
+# Visualisation 3: By using Bar Plot Show Gender Distribution Analysis
+# =============================================================================
 def gender_distribution_bar_plot():
     """
-    This function shows the gender distribution for the top 7 USA cities that are most populated.
-    First, this function read the dataset csv file using pandas, then drop duplicates based on
-    columns `City` and `State`. Clean the dataset, then convert the population to millions based on gender.
-    Sort the dataset based on `Total Population`. Then extract top 20 highest population cities names,
-    their total population of male & female. After data extraction and transformation, draw the bar plot
-    and show the gender distribution analysis using bar plot.
+    This function shows the gender distribution for the top 7 USA cities that 
+    are most populated. First, this function read the dataset csv file using 
+    pandas, then drop duplicates based on columns `City` and `State`. Clean 
+    the dataset, then convert the population to millions based on gender. 
+    Sort the dataset based on `Total Population`. Then extract top 20 highest
+    population cities names, their total population of male & female. After 
+    data extraction and transformation, draw the bar plot and show the gender 
+    distribution analysis using bar plot.
     :return: None
     """
-    # get dataframe object by calling the function get_csv_dataframe(filepath, delimiter).
-    usa_cities_demographics_df = get_csv_dataframe(dataset_usa_cities_demographics_filepath, delimiter=";")
+    # get dataframe object by calling the function get_csv_dataframe(..).
+    usa_cities_demographics_df = get_csv_dataframe(
+        usa_cities_demographics_filepath, delimiter=";")
 
     # Drop duplicate city/state combinations
-    usa_cities_demographics_df = usa_cities_demographics_df.drop_duplicates(subset=['City', 'State'])
+    usa_cities_demographics_df = \
+        usa_cities_demographics_df.drop_duplicates(subset=['City', 'State'])
 
     # convert male population to millions
-    usa_cities_demographics_df['Male Population'] = round(usa_cities_demographics_df['Male Population'] / 1000000)
+    usa_cities_demographics_df['Male Population'] = round(
+        usa_cities_demographics_df['Male Population'] / 1000000)
 
     # convert female population to millions
-    usa_cities_demographics_df['Female Population'] = round(usa_cities_demographics_df['Female Population'] / 1000000)
+    usa_cities_demographics_df['Female Population'] = round(
+        usa_cities_demographics_df['Female Population'] / 1000000)
 
     # sort dataframe records based on total population
-    sorted_population_df = usa_cities_demographics_df.sort_values('Total Population', ascending=False)
+    sorted_population_df = usa_cities_demographics_df.sort_values(
+        'Total Population', ascending=False)
 
     # extract first/top 20 city names
     top_cities_names = sorted_population_df['City'].values.tolist()[:20]
 
     # extract first/top 20 cities male population
-    top_cities_male_pop = sorted_population_df['Male Population'].values.tolist()[:20]
+    top_cities_male_pop = \
+        sorted_population_df['Male Population'].values.tolist()[:20]
 
     # extract first/top 20 cities female population
-    top_cities_female_pop = sorted_population_df['Female Population'].values.tolist()[:20]
+    top_cities_female_pop = \
+        sorted_population_df['Female Population'].values.tolist()[:20]
 
-    # create new figure with and set size width is 10 inches, height is 7 inches.
+    # create new figure with and set size width is 10 & height is 7 inches.
     # The `dpi` parameter shows dots per inch or resolution for the figure
     plt.figure(figsize=(8, 7), dpi=144)
 
-    # draw the bar plot and show male population and set color, width and alpha attribute values
-    plt.bar(top_cities_names, top_cities_male_pop, color='blue', width=0.5, alpha=0.75)
+    # draw the bar plot and show male population and set color, width and
+    # alpha attribute values
+    plt.bar(top_cities_names, top_cities_male_pop,
+            color='blue', width=0.5, alpha=0.75)
 
-    # draw the bar plot to show female population and set color, width and alpha attribute values
-    plt.bar(top_cities_names, top_cities_female_pop, color='green', width=0.5, alpha=0.4)
+    # draw the bar plot to show female population and set color, width
+    # and alpha attribute values
+    plt.bar(top_cities_names, top_cities_female_pop,
+            color='green', width=0.5, alpha=0.4)
 
     # define tile for plot
     title = "Gender Distribution Analysis For Top 20 Most Populated Cities"
@@ -294,7 +341,8 @@ def gender_distribution_bar_plot():
     # set plot title
     plt.title(title)
 
-    # use xticks function and set rotation angle value to 25. It will rotate the x-axis labels to 25 angle.
+    # use xticks function and set rotation angle value to 25.
+    # It will rotate the x-axis labels to 25 angle.
     plt.xticks(rotation=25)
 
     # set xlabel for x-axis
@@ -317,11 +365,14 @@ def gender_distribution_bar_plot():
 __main__: It is the entry point in python script.
 """
 if __name__ == "__main__":
-    # call the function show_avg_temperature_with_line_plot(), it will show average temperature for USA states
+    # call the function show_avg_temperature_with_line_plot(), it will show
+    # average temperature for USA states
     show_avg_temperature_line_plot()
 
-    # call function show_population_histogram_plot(), it will show USA states population with hist plot
+    # call function show_population_histogram_plot(), it will show USA
+    # states population with hist plot
     show_population_histogram_plot()
 
-    # call function show_avg_temperature_line_plot(), it will show gender distribution using bar plot
+    # call function show_avg_temperature_line_plot(), it will show
+    # gender distribution using bar plot
     gender_distribution_bar_plot()
